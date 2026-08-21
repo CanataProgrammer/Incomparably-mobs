@@ -1,6 +1,8 @@
 package com.incomparablymobs;
 
+import com.incomparablymobs.config.EntityFilter;
 import com.incomparablymobs.config.ModConfig;
+import com.incomparablymobs.network.NetworkHandler;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.config.ModConfig.Type;
 import net.minecraft.world.entity.Mob;
@@ -29,11 +31,17 @@ public class incomparablymobs {
     private static final UUID MOVEMENT_SPEED_MODIFIER_ID = UUID.fromString("a9c6b8a8-3f4a-4f5a-8b3a-9f2d1e9b2c1d");
     private static final String MOVEMENT_SPEED_MODIFIER_NAME = "incomparablymobs Movement Speed";
 
+    // 最大HPを増加させるModifierのユニークIDと名前
+    private static final UUID MAX_HEALTH_MODIFIER_ID = UUID.fromString("b1e2c3d4-5f6a-4b7c-8d9e-0f1a2b3c4d5e");
+    private static final String MAX_HEALTH_MODIFIER_NAME = "incomparablymobs Max Health";
+
 
     public incomparablymobs() {
         ModLoadingContext.get().registerConfig(Type.SERVER, ModConfig.SPEC, "incomparablymobs-server.toml");
         // このクラスのイベントハンドラをForgeのイベントバスに登録します。
         MinecraftForge.EVENT_BUS.register(this);
+        // 難易度選択画面のためのネットワークチャンネルを登録します。
+        NetworkHandler.register();
     }
 
     /**
@@ -46,6 +54,12 @@ public class incomparablymobs {
         // イベントからエンティティを取得し、それがMobクラスのインスタンスか確認します。
         // これにより、プレイヤーやアイテムなど、モブ以外のエンティティは対象外になります。
         if (event.getEntity() instanceof Mob mob) {
+
+            // ホワイトリスト/ブラックリストの設定により対象外とされたエンティティには
+            // 何も適用しません。
+            if (!EntityFilter.isTarget(mob)) {
+                return;
+            }
 
             // 移動速度の属性(Attribute)インスタンスを取得します。
             AttributeInstance movementSpeedAttribute = mob.getAttribute(Attributes.MOVEMENT_SPEED);
@@ -67,6 +81,25 @@ public class incomparablymobs {
                 // Modifierを永続的に適用します。
                 movementSpeedAttribute.addPermanentModifier(speedModifier);
             }
+
+            // 最大HPの属性(Attribute)インスタンスを取得します。
+            AttributeInstance maxHealthAttribute = mob.getAttribute(Attributes.MAX_HEALTH);
+
+            if (maxHealthAttribute != null && maxHealthAttribute.getModifier(MAX_HEALTH_MODIFIER_ID) == null) {
+                double healthMultiplier = ModConfig.HEALTH_MULTIPLIER.get() - 1.0;
+                AttributeModifier healthModifier = new AttributeModifier(
+                        MAX_HEALTH_MODIFIER_ID,
+                        MAX_HEALTH_MODIFIER_NAME,
+                        healthMultiplier,
+                        AttributeModifier.Operation.MULTIPLY_TOTAL
+                );
+
+                maxHealthAttribute.addPermanentModifier(healthModifier);
+
+                // 最大HPが変化した直後なので、現在HPも新しい最大値まで満たしておきます。
+                // こうしないと、最大HPだけ増えて表示上のHPバーが半分以下から始まってしまいます。
+                mob.setHealth(mob.getMaxHealth());
+            }
         }
     }
 
@@ -85,6 +118,12 @@ public class incomparablymobs {
 
             // 攻撃者がMobであり、かつ攻撃者が自分自身にダメージを与えている場合（例：棘の鎧の反射ダメージ）は除外します。
             if (attacker == event.getEntity()) {
+                return;
+            }
+
+            // ホワイトリスト/ブラックリストの設定により対象外とされたエンティティの
+            // 攻撃力は強化しません。
+            if (!EntityFilter.isTarget(attacker)) {
                 return;
             }
 

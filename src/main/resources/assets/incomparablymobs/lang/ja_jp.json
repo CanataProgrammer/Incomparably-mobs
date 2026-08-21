@@ -1,0 +1,21 @@
+{
+  "screen.incomparablymobs.difficulty.title": "モブ難易度を選択してください",
+  "screen.incomparablymobs.difficulty.current": "現在の設定: %s",
+
+  "difficulty.incomparablymobs.novice": "初心者",
+  "difficulty.incomparablymobs.novice.button": "簡単すぎるかも？",
+  "difficulty.incomparablymobs.novice.description": "全ステータス変化なし",
+
+  "difficulty.incomparablymobs.default": "通常",
+  "difficulty.incomparablymobs.default.button": "さぁ、始めようか",
+  "difficulty.incomparablymobs.default.description": "HP x1.5, AI速度 x1, 移動速度 x2, 攻撃力 x1.5",
+
+  "difficulty.incomparablymobs.apocalypse": "厄災",
+  "difficulty.incomparablymobs.apocalypse.button": "お前、正気か？",
+  "difficulty.incomparablymobs.apocalypse.description": "HP x3, AI速度 x2, 移動速度 x2, 攻撃力 x2",
+
+  "message.incomparablymobs.difficulty.no_permission": "モブの難易度を変更する権限がありません。",
+  "message.incomparablymobs.difficulty.changed": "モブの難易度を %s に変更しました。",
+  "message.incomparablymobs.difficulty.hint_command": "難易度は /incomparablymobs difficulty コマンドでいつでも変更できます。",
+  "message.incomparablymobs.difficulty.disabled": "このサーバーではモブ難易度選択機能が無効化されています。"
+}

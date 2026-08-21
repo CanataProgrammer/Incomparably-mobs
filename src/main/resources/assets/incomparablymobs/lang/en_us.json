@@ -1,0 +1,21 @@
+{
+  "screen.incomparablymobs.difficulty.title": "Select Mob Difficulty",
+  "screen.incomparablymobs.difficulty.current": "Current: %s",
+
+  "difficulty.incomparablymobs.novice": "Novice",
+  "difficulty.incomparablymobs.novice.button": "Easy?",
+  "difficulty.incomparablymobs.novice.description": "All mob stats unchanged.",
+
+  "difficulty.incomparablymobs.default": "Default",
+  "difficulty.incomparablymobs.default.button": "OK. Lets' Play.",
+  "difficulty.incomparablymobs.default.description": "HP x1.5, AI speed x1, Movement x2, Damage x1.5",
+
+  "difficulty.incomparablymobs.apocalypse": "Apocalypse",
+  "difficulty.incomparablymobs.apocalypse.button": "Are you insane?",
+  "difficulty.incomparablymobs.apocalypse.description": "HP x3, AI speed x2, Movement x2, Damage x2",
+
+  "message.incomparablymobs.difficulty.no_permission": "You do not have permission to change the mob difficulty.",
+  "message.incomparablymobs.difficulty.changed": "Mob difficulty changed to %s.",
+  "message.incomparablymobs.difficulty.hint_command": "You can change the difficulty anytime with /incomparablymobs difficulty.",
+  "message.incomparablymobs.difficulty.disabled": "The mob difficulty selection feature is disabled on this server."
+}
